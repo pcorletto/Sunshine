@@ -3,8 +3,14 @@
 
     <string name="app_name">Sunshine</string>
     <string name="hello_world">Hello world!</string>
+    // The string that follows, named "Settings" is for the Settings button.
     <string name="action_settings">Settings</string>
     <string name="action_refresh" translatable="false">Refresh</string>
     <string name="title_activity_detail">Details</string>
+    // I named the next string "Settings". This is for the title of the SettingsActivity
+    // which is a children activity of parent "DetailActivity". I named it "Settings", but
+    // it is not to be confused with the string above named "Settings", which was for the
+    // button. This one to follow is for the SettingsActivity.
+    <string name="title_activity_settings">Settings</string>
 
 </resources>
