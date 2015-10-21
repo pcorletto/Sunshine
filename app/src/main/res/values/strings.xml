@@ -13,4 +13,30 @@
     // button. This one to follow is for the SettingsActivity.
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Label for the location preference [CHAR LIMIT=30] -->
+    <string name="pref_location_label">Location</string>
+
+    <!-- Key name for storing location in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_location_key" translatable="true">location</string>
+
+    <!-- Default postal code for location preference [CHAR LIMIT=NONE] -->
+    <string name="pref_location_default" translatable="true">33033</string>
+
+    <string name="OPEN_WEATHER_MAP_API_KEY">c67cd960e23d3e951b6e0850175a11ba</string>
+
+    <!-- Label for the temperature unit preference -->
+    <string name="pref_temperature_unit_label">Pick Your Units</string>
+
+    <!-- Label for imperial unit preference -->
+    <string name="pref_imperial_unit_label">IMPERIAL</string>
+
+    <!-- Key name for storing imperial temperature units in SharedPreferences -->
+    <string name="pref_imperial_unit_key" translatable="true">imperial units</string>
+
+    <!-- Label for metric unit preference -->
+    <string name="pref_metric_unit_label">METRIC</string>
+
+    <!-- Key name for storing metric temperature units in SharedPreferences -->
+    <string name="pref_metric_unit_key" translatable="true">metric units</string>
+
 </resources>

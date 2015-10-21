@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -29,8 +31,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Peter Corletto on 10/10/2015.
@@ -64,8 +64,7 @@ public class ForecastFragment extends Fragment {
         // activity in AndroidManifest.xml
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            FetchWeatherTask weatherTask = new FetchWeatherTask();
-            weatherTask.execute("33033,us");
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -85,6 +84,7 @@ public class ForecastFragment extends Fragment {
         // Create some dummy data for the ListView. Here is a sample weekly data
         // represented as "day, weather, high/low".
 
+        /* 10/21/15 Commented out the dummy data so that app shows current data when started.
         String[] forecastArray = {
                 "Mon - Sunny - 88/62",
                 "Tues - Cloudy - 85/79",
@@ -96,7 +96,8 @@ public class ForecastFragment extends Fragment {
         };
 
         List<String> weekForecast = new ArrayList<String>(
-                Arrays.asList(forecastArray));
+                Arrays.asList(forecastArray)); */
+
 
         //Now that we have some dummy forecast data, create an ArrayAdapter.
         //The ArrayAdapter will take data from a source (like our dummy forecast)
@@ -107,11 +108,11 @@ public class ForecastFragment extends Fragment {
                         // The current context (This fragment's parent activity)
                         getActivity(),
                         // ID of list item layout
-                       R.layout.list_item_forecast,
+                        R.layout.list_item_forecast,
                         // ID of the text view to populate
-                       R.id.list_item_forecast_textview,
-                        // Forecast data, it was weekForecast before, try to make it something else
-                        weekForecast);
+                        R.id.list_item_forecast_textview,
+                        // 10/21/15, removed weekForecast from next line to get rid of dummy data
+                        new ArrayList<String>());
 
         // Get a reference to the ListView, and attach this adapter to
         ListView listView = (ListView) rootView.findViewById(
@@ -140,16 +141,16 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l){
 
-            // Replace the Toast with an explicit intent to launch the DetailActivity.
+                // Replace the Toast with an explicit intent to launch the DetailActivity.
 
 
 
-            // Place the code here to display the Toast
-            String forecast = mForecastAdapter.getItem(position);
+                // Place the code here to display the Toast
+                String forecast = mForecastAdapter.getItem(position);
 
-            // Replaced the Toast with an explicit intent to launch the DetailActivity.
-            // Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
+                // Replaced the Toast with an explicit intent to launch the DetailActivity.
+                // Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
                 startActivity(intent);
 
             }
@@ -162,6 +163,23 @@ public class ForecastFragment extends Fragment {
 
 
     }
+
+    private void updateWeather(){
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        weatherTask.execute(location);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        updateWeather();
+    }
+
+
+
+
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
@@ -302,12 +320,14 @@ public class ForecastFragment extends Fragment {
                 final String FORMAT_PARAM = "mode";
                 final String UNITS_PARAM = "units";
                 final String DAYS_PARAM = "cnt";
+                final String APPID_PARAM = "APPID";
 
                 Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                         .appendQueryParameter(QUERY_PARAM, params[0])
                         .appendQueryParameter(FORMAT_PARAM, format)
                         .appendQueryParameter(UNITS_PARAM, units)
                         .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                        .appendQueryParameter(APPID_PARAM, getString(R.string.OPEN_WEATHER_MAP_API_KEY))
                         .build();
 
                 URL url = new URL(builtUri.toString());
@@ -384,16 +404,15 @@ public class ForecastFragment extends Fragment {
             return null;
         }
         @Override
-                protected void onPostExecute(String[] result) {
-                        if (result != null) {
-                                mForecastAdapter.clear();
-                                for(String dayForecastStr : result) {
-                                        mForecastAdapter.add(dayForecastStr);
-                                    }
-                                // New data is back from the server.  Hooray!
-                                    }
-                    }
+        protected void onPostExecute(String[] result) {
+            if (result != null) {
+                mForecastAdapter.clear();
+                for(String dayForecastStr : result) {
+                    mForecastAdapter.add(dayForecastStr);
+                }
+                // New data is back from the server.  Hooray!
+            }
+        }
 
     }
 }
-

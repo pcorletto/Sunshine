@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditTextPreference
+        android:title="@string/pref_location_label"
+        android:key="@string/pref_location_key"
+        android:defaultValue="@string/pref_location_default"
+        android:inputType="text"
+        android:singleLine="true" />
+
+    <PreferenceCategory
+        android:title="@string/pref_temperature_unit_label">
+
+       <CheckBoxPreference
+           android:title="@string/pref_imperial_unit_label"
+           android:defaultValue="true"
+           android:key="@string/pref_imperial_unit_key" />
+
+       <CheckBoxPreference
+           android:title="@string/pref_metric_unit_label"
+           android:defaultValue="false"
+           android:key="@string/pref_metric_unit_key" />
+
+     </PreferenceCategory>
+
+</PreferenceScreen>
