@@ -10,19 +10,11 @@
         android:inputType="text"
         android:singleLine="true" />
 
-    <PreferenceCategory
-        android:title="@string/pref_temperature_unit_label">
-
-       <CheckBoxPreference
-           android:title="@string/pref_imperial_unit_label"
-           android:defaultValue="true"
-           android:key="@string/pref_imperial_unit_key" />
-
-       <CheckBoxPreference
-           android:title="@string/pref_metric_unit_label"
-           android:defaultValue="false"
-           android:key="@string/pref_metric_unit_key" />
-
-     </PreferenceCategory>
+    <ListPreference
+        android:title="@string/pref_units_label"
+        android:key="@string/pref_units_key"
+        android:defaultValue="@string/pref_units_metric"
+        android:entryValues="@array/pref_units_values"
+        android:entries="@array/pref_units_options" />
 
 </PreferenceScreen>
